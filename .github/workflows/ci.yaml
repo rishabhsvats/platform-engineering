@@ -28,7 +28,6 @@ jobs:
         with:
           push: true
           file: ./python-app/Dockerfile
-          context: python-app
           tags: rishabh1234/python-app:${{ env.COMMIT_ID }}
     outputs:
       commit_id: ${{ env.COMMIT_ID }}
