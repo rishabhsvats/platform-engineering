@@ -19,10 +19,14 @@ global:
 certificate:
   enabled: true
 
+configs:
+  params:
+    server.insecure: true
+
 server:
   ingress:
     annotations:
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     enabled: true
     ingressClassName: nginx
-    tls: true
