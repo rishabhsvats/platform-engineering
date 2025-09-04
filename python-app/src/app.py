@@ -8,11 +8,12 @@ app = Flask(__name__)
 
 
 @app.route('/api/v1/details')
-def details():
+def info():
     return jsonify({
     	'time': datetime.datetime.now().strftime("%I:%M:%S%p  on %B %d, %Y"),
     	'hostname': socket.gethostname(),
         'message': 'You are doing great, little human!! This is a pipeline testing!!<3'
+        'deployed_on': 'kubernetes',
     })
 
 @app.route('/api/v1/healthz')
