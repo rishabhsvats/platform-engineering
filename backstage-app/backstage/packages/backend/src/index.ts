@@ -23,6 +23,7 @@ backend.add(
 // techdocs plugin
 backend.add(import('@backstage/plugin-techdocs-backend'));
 
+
 // auth plugin
 backend.add(import('@backstage/plugin-auth-backend'));
 
