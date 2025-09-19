@@ -63,6 +63,7 @@ jobs:
         run: |
           argocd login argocd-server.argocd \
             --insecure  \
+            --plaintext \
             --grpc-web \
             --username admin \
             --password  ${{ '${{ secrets.ARGOCD_PASSWORD }}' }}
