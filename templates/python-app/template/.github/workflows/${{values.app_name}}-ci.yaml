@@ -42,14 +42,14 @@ jobs:
       - name: Modify values file
         shell: bash
         run: |
-          echo ${{needs.ci.outputs.commit_id}}
+          echo ${{ '${{needs.ci.outputs.commit_id}}' }}
           pip install yq
-          yq -Yi '.image.tag = "${{needs.ci.outputs.commit_id}}"' charts/${{values.app_name}}/values-${{values.app_env}}.yaml
+          yq -Yi '.image.tag = "${{'${{needs.ci.outputs.commit_id}}' }}"' charts/${{values.app_name}}/values-${{values.app_env}}.yaml
 
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
         with:
-          message: 'Updates values.yaml with commit ${{needs.ci.outputs.commit_id}}'
+          message: 'Updates values.yaml with commit ${{ '${{needs.ci.outputs.commit_id}}' }}'
 
       - name: Install argocd
         shell: bash
@@ -58,12 +58,36 @@ jobs:
           chmod +x argocd
           sudo mv ./argocd /usr/local/bin/argocd
 
-      - name: Argocd app sync
+      - name: argocd login
         shell: bash
         run: |
           argocd login argocd-server.argocd \
-            --plaintext  \
+            --insecure  \
             --grpc-web \
             --username admin \
             --password  ${{ '${{ secrets.ARGOCD_PASSWORD }}' }}
+
+      - name: Ensure argocd repo and app
+        shell: bash
+        run: |
+
+          # Connects the argocd repo
+          repo="https://github.com/rishabhsvats-org/${{values.app_name}}.git"
+          argocd repo list | grep -q $repo || argocd repo add $repo
+
+          # Creates the argocd app
+          argocd app get ${{values.app_name}} || argocd app create ${{values.app_name}} \
+            --repo $repo \
+            --path charts/${{values.app_name}} \
+            --dest-namespace ${{values.app_env}} \
+            --dest-server https://kubernetes.default.svc \
+            --values values-${{values.app_env}}.yaml \
+            --revision master \
+            --sync-policy manual \
+            --sync-option CreateNamespace=true
+
+      - name: Argocd app sync
+        shell: bash
+        run: |
           argocd app sync ${{values.app_name}}
+          argocd app wait ${{values.app_name}} --timeout 180
