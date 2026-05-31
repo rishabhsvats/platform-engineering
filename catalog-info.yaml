@@ -9,5 +9,5 @@ metadata:
     backstage.io/source-location: url:https://github.com/rishabhsvats/platform-engineering
 spec:
   type: service
-  owner: rhdh-team
+  owner: user:default/test1
   lifecycle: experimental
