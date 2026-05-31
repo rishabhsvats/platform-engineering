@@ -6,6 +6,7 @@ metadata:
   annotations:
     github.com/project-slug: rishabhsvats/platform-engineering
     backstage.io/techdocs-ref: dir:./python-app
+    backstage.io/source-location: url:https://github.com/rishabhsvats/platform-engineering
 spec:
   type: service
   owner: rhdh-team
