@@ -8,5 +8,5 @@ metadata:
     backstage.io/techdocs-ref: dir:./python-app
 spec:
   type: service
-  owner: development
+  owner: test1@example.com
   lifecycle: experimental
